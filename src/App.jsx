@@ -12,7 +12,6 @@ function App() {
   const intervalRef = useRef(null);
   const beepRef = useRef(null);
 
-  // Format seconds as mm:ss.
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -22,7 +21,6 @@ function App() {
     ).padStart(2, "0")}`;
   };
 
-  // Stop the interval.
   const stopTimer = () => {
     if (intervalRef.current !== null) {
       clearInterval(intervalRef.current);
@@ -30,7 +28,6 @@ function App() {
     }
   };
 
-  // Adjust break length between 1 and 60 minutes.
   const changeBreakLength = (amount) => {
     if (isRunning) return;
 
@@ -39,14 +36,12 @@ function App() {
     );
   };
 
-  // Adjust session length between 1 and 60 minutes.
   const changeSessionLength = (amount) => {
     if (isRunning) return;
 
     setSessionLength((previous) => {
       const updated = Math.min(60, Math.max(1, previous + amount));
 
-      // Update the display if it still shows the original session duration.
       setTimeLeft((currentTime) => {
         if (
           timerLabel === "Session" &&
@@ -62,7 +57,6 @@ function App() {
     });
   };
 
-  // Reset the entire clock.
   const resetTimer = () => {
     stopTimer();
 
@@ -78,7 +72,6 @@ function App() {
     }
   };
 
-  // Start, pause, or resume.
   const toggleTimer = () => {
     setIsRunning((previous) => !previous);
   };
@@ -95,12 +88,10 @@ function App() {
           return previousTime - 1;
         }
 
-        // Reach 00:00 before switching to the next period.
         if (previousTime === 1) {
           return 0;
         }
 
-        // Play the beep when the timer is already at 00:00.
         if (beepRef.current) {
           beepRef.current.currentTime = 0;
 
