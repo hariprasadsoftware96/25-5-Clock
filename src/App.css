@@ -1,0 +1,193 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Ubuntu", sans-serif;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color: #ffffff;
+}
+
+button {
+  font-family: inherit;
+}
+
+.clock-app {
+  width: min(90%, 600px);
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+}
+
+.app-title {
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin: 0 0 35px;
+  text-align: center;
+  letter-spacing: 2px;
+  color: #5ee7df;
+}
+
+.length-settings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  width: 100%;
+  margin-bottom: 35px;
+}
+
+.length-box {
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+}
+
+.length-box h2 {
+  font-size: 1.15rem;
+  margin: 0 0 18px;
+  white-space: nowrap;
+}
+
+.length-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.length-controls button {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #5ee7df;
+  color: #141e30;
+  font-size: 1.6rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.length-controls button:hover:not(:disabled) {
+  background: #a8f5ef;
+  transform: scale(1.08);
+}
+
+.length-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#break-length,
+#session-length {
+  min-width: 25px;
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.timer-box {
+  width: 100%;
+  max-width: 380px;
+  padding: 30px 20px;
+  border: 3px solid #5ee7df;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 0 25px rgb(94 231 223 / 15%);
+}
+
+#timer-label {
+  font-size: 1.8rem;
+  margin: 0 0 15px;
+}
+
+#time-left {
+  font-size: clamp(3.5rem, 12vw, 5rem);
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+#time-left.time-warning {
+  color: #ff7676;
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.timer-controls button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+#start_stop {
+  background: #5ee7df;
+  color: #141e30;
+}
+
+#reset {
+  background: #ff7676;
+  color: #ffffff;
+}
+
+.timer-controls button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.footer-text {
+  margin-top: 30px;
+  color: #b8c6db;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+#beep {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .clock-app {
+    width: 100%;
+    padding: 25px 14px;
+  }
+
+  .length-settings {
+    gap: 12px;
+  }
+
+  .length-box h2 {
+    font-size: 0.95rem;
+  }
+
+  .length-controls {
+    gap: 9px;
+  }
+
+  .length-controls button {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+
+  .timer-box {
+    padding: 25px 12px;
+  }
+}
