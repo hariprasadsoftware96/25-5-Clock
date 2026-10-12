@@ -12,7 +12,7 @@ function App() {
   const intervalRef = useRef(null);
   const beepRef = useRef(null);
 
-  // Convert seconds into mm:ss format.
+  // Format seconds as mm:ss.
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -22,7 +22,7 @@ function App() {
     ).padStart(2, "0")}`;
   };
 
-  // Clear the timer interval.
+  // Stop the interval.
   const stopTimer = () => {
     if (intervalRef.current !== null) {
       clearInterval(intervalRef.current);
@@ -30,7 +30,7 @@ function App() {
     }
   };
 
-  // Change break length.
+  // Adjust break length between 1 and 60 minutes.
   const changeBreakLength = (amount) => {
     if (isRunning) return;
 
@@ -39,41 +39,38 @@ function App() {
     );
   };
 
-  // Change session length.
+  // Adjust session length between 1 and 60 minutes.
   const changeSessionLength = (amount) => {
     if (isRunning) return;
 
-    setSessionLength((previous) =>
-      Math.min(60, Math.max(1, previous + amount))
-    );
+    setSessionLength((previous) => {
+      const updated = Math.min(60, Math.max(1, previous + amount));
 
-    // Update the displayed timer only during a session.
-    if (timerLabel === "Session") {
-      setTimeLeft((previous) => {
-        const currentMinutes = Math.floor(previous / 60);
-
-        // Update the timer when it still reflects the session length.
+      // Update the display if it still shows the original session duration.
+      setTimeLeft((currentTime) => {
         if (
-          currentMinutes === sessionLength &&
-          previous % 60 === 0
+          timerLabel === "Session" &&
+          currentTime === previous * 60
         ) {
-          return (sessionLength + amount) * 60;
+          return updated * 60;
         }
 
-        return previous;
+        return currentTime;
       });
-    }
+
+      return updated;
+    });
   };
 
-  // Reset everything to its default values.
+  // Reset the entire clock.
   const resetTimer = () => {
     stopTimer();
 
     setIsRunning(false);
     setBreakLength(5);
     setSessionLength(25);
-    setTimerLabel("Session");
     setTimeLeft(25 * 60);
+    setTimerLabel("Session");
 
     if (beepRef.current) {
       beepRef.current.pause();
@@ -81,7 +78,7 @@ function App() {
     }
   };
 
-  // Start, pause, or resume the countdown.
+  // Start, pause, or resume.
   const toggleTimer = () => {
     setIsRunning((previous) => !previous);
   };
@@ -89,28 +86,40 @@ function App() {
   useEffect(() => {
     if (!isRunning) {
       stopTimer();
-      return;
+      return undefined;
     }
 
     intervalRef.current = setInterval(() => {
       setTimeLeft((previousTime) => {
-        if (previousTime > 0) {
+        if (previousTime > 1) {
           return previousTime - 1;
         }
 
-        // The timer has reached 00:00.
+        // Reach 00:00 before switching to the next period.
+        if (previousTime === 1) {
+          return 0;
+        }
+
+        // Play the beep when the timer is already at 00:00.
         if (beepRef.current) {
           beepRef.current.currentTime = 0;
-          beepRef.current.play().catch(() => {});
+
+          const playPromise = beepRef.current.play();
+
+          if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              console.error("Unable to play beep:", error);
+            });
+          }
         }
 
         if (timerLabel === "Session") {
           setTimerLabel("Break");
           return breakLength * 60;
-        } else {
-          setTimerLabel("Session");
-          return sessionLength * 60;
         }
+
+        setTimerLabel("Session");
+        return sessionLength * 60;
       });
     }, 1000);
 
@@ -202,7 +211,7 @@ function App() {
         id="beep"
         ref={beepRef}
         preload="auto"
-        src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+        src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
       />
     </main>
   );

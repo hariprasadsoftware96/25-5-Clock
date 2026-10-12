@@ -45,8 +45,8 @@ button {
 
 .length-box {
   flex: 1;
-  text-align: center;
   min-width: 0;
+  text-align: center;
 }
 
 .length-box h2 {
